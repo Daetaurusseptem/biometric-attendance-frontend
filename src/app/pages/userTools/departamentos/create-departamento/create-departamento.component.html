@@ -1,0 +1,41 @@
+
+<div class="card" >
+    <div class="card-header">
+      <div class="card-tile">
+        <h2>Crear Nuevo Departamento</h2>
+      </div>
+    </div>
+    <div class="card-body">
+      
+      <div class="container mt-3">
+        <form #companyForm="ngForm">
+          <!-- Campo oculto para _id, ya que no se debería cambiar -->
+          <input type="hidden" [(ngModel)]="departamento._id" name="_id">
+      
+          <div class="mb-3">
+            <label for="name" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="name" [(ngModel)]="departamento.nombre" name="name" required>
+          </div>
+      
+       
+          <!-- <div class="mb-3">
+            <label for="img" class="form-label">URL de la Imagen</label>
+            <input type="text" class="form-control" id="img" [(ngModel)]="empresa.img" name="img" required>
+          </div> -->
+      
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripcion</label>
+            <textarea class="form-control" id="nombre" [(ngModel)]="departamento.descripcion" name="descripcion" required></textarea>
+          </div>
+      
+          
+      
+          
+          <!-- Botón para crear la empresa -->
+          <button type="submit" class="btn btn-primary" (click)="createDepartamento(companyForm)" [disabled]="!companyForm.form.valid">Crear Empresa</button>
+        </form>
+      </div>
+  
+    </div>
+  </div>
+  

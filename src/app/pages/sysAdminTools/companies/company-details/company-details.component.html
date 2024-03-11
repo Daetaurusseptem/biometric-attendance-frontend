@@ -1,0 +1,24 @@
+<div *ngIf="!company&&!admin" class="card">
+    <app-loading-data-spinner></app-loading-data-spinner>
+</div>
+<app-spinner *ngIf="!company&&!admin"></app-spinner>
+
+<div *ngIf="company&&admin" class="container mt-4">
+    <div class="card">
+        <!-- <img [src]="company.img!" class="card-img-top img-avatar text-center" alt="Imagen de la Empresa" *ngIf="company.img!"> -->
+        <div class="card-body">
+            <h5 class="card-title">{{ company.nombre }}</h5>
+            <p class="card-text">{{ company.descripcion }}</p>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong><i class="bi bi-house-door-fill"></i> Dirección:</strong> {{ company.direccion }}</li>
+                <li class="list-group-item"><strong><i class="bi bi-telephone-fill"></i> Teléfono:</strong> {{ company.tel }}</li>
+                <li class="list-group-item"><strong><i class="bi bi-at"></i> Email:</strong> {{ company.email }}</li>
+                <li class="list-group-item"><strong><i class="bi bi-person-circle"></i> Administrado: </strong> </li>
+                <li class="list-group-item"><strong>USERNAME: </strong> {{admin.username}}</li>
+                <li class="list-group-item"><strong>NOMBRE: </strong>{{admin.nombre}} </li>
+                
+            </ul>
+        </div>
+    </div>
+
+   

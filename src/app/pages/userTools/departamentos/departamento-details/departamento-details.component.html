@@ -1,0 +1,38 @@
+<div class="container">
+    
+    <div class="row">
+        <h2>Detalles del Departamento: {{ departamento.nombre }}</h2>
+
+        <a name="" id="" class="btn btn-primary end" routerLink="new" role="button">
+            <i class="bi bi-plus-lg"></i> Crear Empleado
+          </a>
+    </div>
+    <p>{{ departamento.descripcion }}</p>
+    <mat-divider></mat-divider>
+    <h3>Empleados</h3>
+    <table mat-table [dataSource]="empleados" class="mat-elevation-z8">
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef> Nombre </th>
+        <td mat-cell *matCellDef="let empleado"> {{empleado.nombre}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="descripcion">
+        <th mat-header-cell *matHeaderCellDef> Descripción </th>
+        <td mat-cell *matCellDef="let empleado"> {{empleado.descripcion}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let empleado">
+          <button mat-button [routerLink]="['/editar', empleado._id]">Editar</button>
+          <button mat-button color="warn" 
+          (click)="eliminarEmpleado(empleado._id)"
+          >Eliminar</button>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="['nombre', 'descripcion', 'acciones']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['nombre', 'descripcion', 'acciones'];"></tr>
+    </table>
+  </div>
+  

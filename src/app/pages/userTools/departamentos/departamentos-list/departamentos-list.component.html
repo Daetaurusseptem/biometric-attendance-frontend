@@ -1,0 +1,81 @@
+<div class="row">
+  <div class="col-12 mx-auto text-center mb-2">
+    <div class="card">
+
+      <div class="card-header">
+        <div class="card-title text-center">
+          <h5>Búsqueda de Departamentos</h5>
+        </div>
+        <a name="" id="" class="btn btn-primary end" routerLink="new" role="button">
+          <i class="bi bi-plus-lg"></i> Crear Departamento
+        </a>
+      </div>
+      <form>
+        <div class="m-5">
+          <input type="text" class="form-control" id="busquedaEmpresa" aria-describedby="busquedaHelp" #terminoEmpresa>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="col-12 mx-auto text-center">
+    <div class="card">
+      <div class="card-title p-4">
+        <div class="card-title start">
+          <h2>Departamentos Registrados</h2>
+
+        </div>
+        <!-- Agrega aquí cualquier botón o enlace adicional si es necesario -->
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+
+                <!-- <th scope="col">img</th> -->
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripcion</th>
+
+                <th scope="col">Herramientas</th>
+              </tr>
+            </thead>
+
+            <tbody *ngIf="departamentos" class="text-left">
+
+              <tr *ngFor="let department of departamentos; index as i">
+
+                <td>{{department.nombre}}</td>
+                <td>{{department.descripcion}}</td>
+
+
+
+
+                <td>
+                  <button class="btn btn-success btn-sm me-2 d-inline"
+                    [routerLink]="['/dashboard/admin/departments/details',department._id]">
+                    <i class="bi bi-info"></i>
+                  </button>
+                  <button class="btn btn-primary btn-sm me-2 d-inline"
+                    [routerLink]="['/dashboard/admin/departments/edit',department._id]">
+                    <i class="bi bi-pencil-fill"></i>
+                  </button>
+                  <button (click)="deleteCompany(department._id!)" class="btn btn-danger btn-sm d-inline">
+                    <i class="bi bi-trash3-fill"></i>
+
+                  </button>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+          <div class="card bg-primary text-light" *ngIf="!departamentos">
+
+            <app-loading-data-spinner class="mb-2"></app-loading-data-spinner>
+            <p>Cargando Registros</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
