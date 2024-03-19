@@ -15,6 +15,7 @@ import { DepartamentosListComponent } from './userTools/departamentos/departamen
 import { CreateDepartamentoComponent } from './userTools/departamentos/create-departamento/create-departamento.component';
 import { RoleGuard } from '../guards/role.guard';
 import { DepartamentoDetailsComponent } from './userTools/departamentos/departamento-details/departamento-details.component';
+import { EmpleadosListComponent } from './userTools/empleados/empleados-list/empleados-list.component';
 
 
 const routes: Routes = [
@@ -41,6 +42,10 @@ const routes: Routes = [
       { path: 'admin/departments/:new',canActivate:[AuthGuardGuard], component:  CreateDepartamentoComponent},
       { path: 'admin/users',canActivate:[AuthGuardGuard], component:  UserListComponent},
       { path: 'admin/users/new',canActivate:[AuthGuardGuard], component:  CreateUserReComponent},
+      { path: 'admin/users/edit/:id',canActivate:[AuthGuardGuard], component:  UserEditComponent},
+
+      { path: 'admin/employees',canActivate:[AuthGuardGuard], component:  EmpleadosListComponent},
+      { path: 'admin/employees/edit',canActivate:[AuthGuardGuard], component:  EmpleadosListComponent},
       
       { path: 'admin/departments/details/:id',canActivate:[AuthGuardGuard], component:  DepartamentoDetailsComponent},
       
