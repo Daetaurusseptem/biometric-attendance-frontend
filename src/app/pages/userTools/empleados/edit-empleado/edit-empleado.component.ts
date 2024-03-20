@@ -27,7 +27,7 @@ export class EditEmpleadoComponent {
   employeeForm: FormGroup = this.fb.group({
    
     nombre:['', [Validators.min(4), Validators.maxLength(50)]],
-    apellido1:['', [Validators.min(4), Validators.maxLength(50)]],
+    apellido1:['', [Validators.min(4), Validators.maxLength(50)]], 
     apellido2:[Validators.min(4), Validators.maxLength(50)],
     direccion:[Validators.min(4), Validators.maxLength(50)],
     telefono:[Validators.min(4), Validators.maxLength(50)],

@@ -1,6 +1,5 @@
 <div class="row">
-<<<<<<< HEAD
-  <div  class="col-12 mx-auto text-center mb-2">
+  <<<<<<< HEAD <div class="col-12 mx-auto text-center mb-2">
     <div class="card">
       <div class="card-header">
         <div class="card-title text-center">
@@ -16,30 +15,30 @@
         </div>
       </form>
     </div>
-  </div>
-  <div class="col-12 mx-auto text-center">
-    <div class="card">
-      <div class="card-title p-4 start">
-      
-        <h2>Lista de Usuarios Registrados</h2>
-      </div>
-      <div class="card-body">
-        <div class="table-responsive">
+</div>
+<div class="col-12 mx-auto text-center">
+  <div class="card">
+    <div class="card-title p-4 start">
 
-          <table class="table table1-striped">
-            <thead>
-              <tr>
-                <!-- <th>img</th> -->
-                <th>UID Biometrico</th>
-                <th>Nombre</th>
-                <th>Nombre de Usuario</th>
-                <th>Rol</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let empleado of empleados">
-                <!-- <td  class="text-center">
+      <h2>Lista de Usuarios Registrados</h2>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+
+        <table class="table table1-striped">
+          <thead>
+            <tr>
+              <!-- <th>img</th> -->
+              <th>UID Biometrico</th>
+              <th>Nombre</th>
+              <th>telefono</th>
+              <th>Email</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let empleado of empleados">
+              <!-- <td  class="text-center">
                   <img *ngIf="user.img=='no-image'" src="../../../../../assets/img/no-img.webp"
                           alt="Avatar de usuario"
                           class="avatar pointer"
@@ -50,96 +49,26 @@
                           (click)="abrirModal(user)">
   
                 </td> -->
-                <td>{{ empleado.uidBiometrico }}</td>
-                <td>{{ empleado.nombre + " "+empleado.apellido1+" "+empleado.apellido2}}</td>
-                <td>{{ empleado.telefono ||"No proporcionado" }}</td>
-                <td>{{ empleado.email ||"No proporcionado" }}</td>
-                <td>
-                  <button class="btn btn-primary btn-sm me-2 d-inline"
-                    [routerLink]="['/dashboard/admin/employees/edit',empleado._id]">
-                    <i class="bi bi-pencil-fill"></i>
-                  </button>
-                  <button   (click)="deleteEmpleado(empleado._id!)" class="btn btn-danger btn-sm d-inline">
-                      <i class="bi bi-trash3-fill"></i>
+              <td>{{ empleado.uidBiometrico }}</td>
+              <td>{{ empleado.nombre + " "+empleado.apellido1+" "+empleado.apellido2}}</td>
+              <td>{{ empleado.telefono ||"No proporcionado" }}</td>
+              <td>{{ empleado.email ||"No proporcionado" }}</td>
+              <td>
+                <button class="btn btn-primary btn-sm me-2 d-inline"
+                  [routerLink]="['/dashboard/admin/employees/edit',empleado._id]">
+                  <i class="bi bi-pencil-fill"></i>
+                </button>
+                <button (click)="deleteEmpleado(empleado._id!)" class="btn btn-danger btn-sm d-inline">
+                  <i class="bi bi-trash3-fill"></i>
 
-                    </button>
-                </td>
-                
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                </button>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 </div>
-=======
-    <div class="col-12 mx-auto text-center mb-2">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title text-center">
-            <h5>Búsqueda de Usuarios</h5>
-          </div>
-          <a name="" id="" class="btn btn-primary end" routerLink="new" role="button">
-            <i class="bi bi-plus-lg"></i> Crear Usuario
-          </a>
-        </div>
-        <form>
-          <div class="m-5">
-            <input type="text" class="form-control" id="busquedaEmpresa" aria-describedby="busquedaHelp" #terminoEmpresa>
-          </div>
-        </form>
-      </div>
-    </div>
-    <div class="col-12 mx-auto text-center">
-      <div class="card">
-        <div class="card-title p-4 start">
-        
-          <h2>Lista de Usuarios Registrados</h2>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-  
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <!-- <th>img</th> -->
-                  <th>Nombre</th>
-                  <th>Telefono</th>
-                  <th>email</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let empleado of empleados">
-                  <!-- <td  class="text-center">
-                    <img *ngIf="user.img=='no-image'" src="../../../../../assets/img/no-img.webp"
-                            alt="Avatar de usuario"
-                            class="avatar pointer"
-                            (click)="abrirModal(user)">
-                    <img *ngIf="user.img!='no-image'" [src]="user.img"
-                            alt="Avatar de usuario"
-                            class="avatar pointer"
-                            (click)="abrirModal(user)">
-    
-                  </td> -->
-                  <td>{{ empleado.nombre+" "+empleado.apellido1+" "+empleado.apellido2 || 'No Especificado' }}</td>
-                  <td>{{ empleado.telefono }}</td>
-                  <td>{{ empleado.email }}</td>
-                  <td>
-                    <button class="btn btn-primary btn-sm me-2 d-inline"
-                      [routerLink]="['/dashboard/sysadmin/users/edit',empleado._id]">
-                      <i class="bi bi-pencil-fill"></i>
-                    </button>
-                    
-                  </td>
-                  
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
->>>>>>> 5f5ddfe9763055b1dfb30c4a0be37e6fe77b5906
+</div>
