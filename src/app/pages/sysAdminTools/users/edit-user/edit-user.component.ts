@@ -6,7 +6,7 @@ import { Usuario } from 'src/app/interfaces/models.interface';
 import { UsuariosService } from 'src/app/services/users.service';
 import Swal from 'sweetalert2';
 
-// Importar otros servicios o módulos según sea necesario
+
 const pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
 const control = new FormControl('bad@', Validators.email);
 

@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
+
+
+import { ActivatedRoute } from '@angular/router';
 import { Subscription, delay, map } from 'rxjs';
-import { Empleado, Usuario } from 'src/app/interfaces/models.interface';
+import { Empleado } from 'src/app/interfaces/models.interface';
+
 import { AuthService } from 'src/app/services/auth.service';
 import { EmpleadosService } from 'src/app/services/empleados.service';
 import { ModalService } from 'src/app/services/modal.service';
@@ -13,10 +17,10 @@ import Swal from 'sweetalert2';
   styleUrls: ['./empleados-list.component.css']
 })
 export class EmpleadosListComponent {
-
   empleados: Empleado[] = [];
   public imgSubs!: Subscription;
   companyId!:any;
+  id: string = '';
 
   usuario = this.authService.usuario;
 
@@ -24,9 +28,12 @@ export class EmpleadosListComponent {
     private empleadoService: EmpleadosService,
     private authService: AuthService,
     private utilitiesService: UtilitiesService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private activatedRoute:ActivatedRoute
 
   ) {
+   
+
       if(this.usuario.rol = 'admin'){
         this.companyId = this.usuario.empresa!
       }
@@ -43,6 +50,49 @@ export class EmpleadosListComponent {
       .pipe(delay(100))
       .subscribe(img => this.loadUsers());
   }
+
+  deleteUser(id: string) {
+    Swal.fire({
+      title: 'Esta Seguro?',
+      text: 'Este proceso no se podrá deshacer',
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonColor: '#F56A52',
+      iconColor: '#F56A52',
+      allowEnterKey: false
+
+    })
+      .then(resp => {
+        if (resp.isConfirmed) {
+          this.empleadoService.deleteEmpleado(id)
+            .subscribe(resp => {
+              if (resp.ok == true) {
+                Swal.fire({
+                  title: 'Registro eliminado',
+                  icon: 'success'
+                })
+              } else if (resp.ok == false) {
+                Swal.fire({
+                  title: 'El registro no pudo ser eliminado',
+                  icon: 'error'
+                })
+
+              }
+
+              this.utilitiesService.redirectTo(`/dashboard/sysadmin/users`)
+            }, err => {
+              Swal.fire({
+                title: 'Registro no eliminado',
+                icon: 'error',
+                text: err.error.msg
+              })
+            })
+        }
+      })
+  }
+
+ 
+
 
   deleteEmpleado(id: string) {
     Swal.fire({
