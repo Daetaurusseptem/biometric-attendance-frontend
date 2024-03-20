@@ -24,7 +24,11 @@
       <button [routerLink]="['admin/users']">
         <i class="bi bi-person-circle"></i>
         Gestionar Usuarios</button>
-      <!-- Más controles -->
+      
+      <button [routerLink]="['admin/employees']">
+        <i class="bi bi-person-circle"></i>
+        Gestionar Empleados</button>
+      
     </div>
     <div *ngIf="user.rol=='user'"  class="control-panel">
       <button  [routerLink]="['sysadmin/companies']">Gestionar Empresas</button>

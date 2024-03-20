@@ -94,7 +94,7 @@ getRole(){
           })
           .then(()=>{
             if(this.UsuarioRole=='admin'){
-              this.router.navigateByUrl('/dashboard/admin/Usuarios')
+              this.router.navigateByUrl('/dashboard/admin/users')
             }else if(this.UsuarioRole=='sysadmin'){
               this.router.navigateByUrl('/dashboard/sysadmin/users')
             }
