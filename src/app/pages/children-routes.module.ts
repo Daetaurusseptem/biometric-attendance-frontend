@@ -17,6 +17,7 @@ import { RoleGuard } from '../guards/role.guard';
 import { DepartamentoDetailsComponent } from './userTools/departamentos/departamento-details/departamento-details.component';
 import { EmpleadosListComponent } from './userTools/empleados/empleados-list/empleados-list.component';
 import { EditEmpleadoComponent } from './userTools/empleados/edit-empleado/edit-empleado.component';
+import { EmpleadosAttendancesComponent } from './userTools/empleados/empleados-attendances/empleados-attendances.component';
 
 
 const routes: Routes = [
@@ -50,9 +51,10 @@ const routes: Routes = [
       
       { path: 'admin/employees',canActivate:[AuthGuardGuard], component:  EmpleadosListComponent},
       { path: 'admin/employees/edit/:id',canActivate:[AuthGuardGuard], component:  EditEmpleadoComponent},
+      { path: 'admin/employees/attendances/:empresaId',canActivate:[AuthGuardGuard], component:  EmpleadosAttendancesComponent},
+      
 
-
-
+    
   ]
 }
 ];

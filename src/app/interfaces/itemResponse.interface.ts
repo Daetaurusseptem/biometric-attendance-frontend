@@ -26,5 +26,9 @@ export interface itemResponse {
   stripeResponse:StripeResponse;
   numberOfUsers:number,
   numberOfCompanies:number,
-  numberOfProducts:number
+  numberOfProducts:number,
+  employeesAttendances:[{
+    empleado:Empleado, 
+    asistencias:Asistencia[]
+  }]
 }

@@ -1,0 +1,49 @@
+<div class="container">
+    <div class="row">
+      <div class="col">
+        <h2>Asistencias</h2>
+        <form (submit)="loadAsistencias()">
+          <div class="mb-3">
+            <label for="monthSelect" class="form-label">Mes:</label>
+            <select class="form-control" id="monthSelect" [(ngModel)]="month" name="month">
+              <option *ngFor="let m of months" [value]="m.value">{{m.name}}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="yearInput" class="form-label">Año:</label>
+            <input type="number" class="form-control" id="yearInput" [(ngModel)]="year" name="year">
+          </div>
+          <button type="submit" class="btn btn-primary">Actualizar</button>
+        </form>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Empleado</th>
+                  <th>Entrada</th>
+                  <th>Salida</th>
+                  <th>Tipo</th>
+                  <th>Detalles</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let asistencia of asistencias">
+                  <td>{{ asistencia.empleado.nombre }}</td>
+                  <td>{{ asistencia.entrada | date:'shortTime' }}</td>
+                  <td>{{ asistencia.salida | date:'shortTime' }}</td>
+                  <td>{{ asistencia.tipo }}</td>
+                  <td>{{ asistencia.detalles }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

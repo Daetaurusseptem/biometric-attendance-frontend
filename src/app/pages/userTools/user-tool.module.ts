@@ -16,6 +16,7 @@ import { DepartmentDetailsComponent } from './departamentos/department-details/d
 
 import {MatDividerModule} from '@angular/material/divider';
 import {MatTableModule} from '@angular/material/table';
+import { EmpleadosAttendancesComponent } from './empleados/empleados-attendances/empleados-attendances.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import {MatTableModule} from '@angular/material/table';
     EditEmpleadoComponent,
     CreateEmpleadoComponent,
     EmpleadoDetailsComponent,
-    DepartmentDetailsComponent
+    DepartmentDetailsComponent,
+    EmpleadosAttendancesComponent
   ],
   exports: [
     DepartamentosListComponent,
