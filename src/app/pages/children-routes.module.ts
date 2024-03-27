@@ -51,7 +51,7 @@ const routes: Routes = [
       
       { path: 'admin/employees',canActivate:[AuthGuardGuard], component:  EmpleadosListComponent},
       { path: 'admin/employees/edit/:id',canActivate:[AuthGuardGuard], component:  EditEmpleadoComponent},
-      { path: 'admin/employees/attendances/:empresaId',canActivate:[AuthGuardGuard], component:  EmpleadosAttendancesComponent},
+      { path: 'admin/employees/attendances',canActivate:[AuthGuardGuard], component:  EmpleadosAttendancesComponent},
       
 
     

@@ -28,7 +28,9 @@
       <button [routerLink]="['admin/employees']">
         <i class="bi bi-person-circle"></i>
         Gestionar Empleados</button>
-      
+      <button [routerLink]="['admin/employees/attendances']">
+        <i class="bi bi-calendar"></i>
+        Gestionar Asistencias</button>
     </div>
     <div *ngIf="user.rol=='user'"  class="control-panel">
       <button  [routerLink]="['sysadmin/companies']">Gestionar Empresas</button>

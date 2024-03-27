@@ -2,7 +2,8 @@
 export interface Asistencia {
     _id?: string;
     empleado: string; // Referencia al ID de Empleado
-    fechaHora: Date;
+    entrada: Date;
+    salida: Date;
     tipo: 'asistencia' | 'falta' | 'vacaciones' | 'permiso';
     detalles?: string;
   }
@@ -31,6 +32,7 @@ export interface Asistencia {
     numeroEmpleado: string;
     posicion?: string;
     sincronizadoBiometrico?: boolean;
+    asistencias?:Asistencia[]
   }
   
   // empresa.interface.ts

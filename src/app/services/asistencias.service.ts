@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { itemResponse } from '../interfaces/itemResponse.interface';
+import { Empleado } from '../interfaces/models.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +13,21 @@ export class AsistenciasService {
 
   constructor(private http: HttpClient) { }
 
-  getAsistenciasMes(empresaId: string, month: string, year: string, departamentoId?: string): Observable<itemResponse> {
-    let query = `?month=${month}&year=${year}`;
-    if (departamentoId) query += `&departamentoId=${departamentoId}`;
+  getAsistenciasMes(empresaId: string, month: number, year: number, page:number, limit:number) {
+    // Reemplaza con la lógica adecuada para realizar la petición al backend
 
-    return this.http.get<itemResponse>(`${this.baseURL}/asistencias/mensuales/${empresaId}${query}`);
+    console.log(empresaId,month, year, page );
+    return this.http.get<itemResponse>(`${this.baseURL}/asistencias/mensuales/${empresaId}?page=${page}&limit=${10}&month=${month}&year=${year}&limit=${limit}`);
   }
+
+  obtenerAsistencia(empleado: Empleado, dia: Date): string {
+    const fecha = new Date(dia).setHours(0, 0, 0, 0);
+    const asistenciaDelDia = empleado.asistencias!.find(asistencia => {
+      const entrada = new Date(asistencia.entrada).setHours(0, 0, 0, 0);
+      return entrada === fecha;
+    });
+    
+    return asistenciaDelDia ? 'Asistió' : 'No Asistió';
+  }
+  
 }

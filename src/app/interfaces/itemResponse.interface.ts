@@ -31,4 +31,5 @@ export interface itemResponse {
     empleado:Empleado, 
     asistencias:Asistencia[]
   }]
+  totalEmpleados:any
 }

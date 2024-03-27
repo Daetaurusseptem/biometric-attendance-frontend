@@ -50,7 +50,7 @@
   
                 </td> -->
               <td>{{ empleado.uidBiometrico }}</td>
-              <td>{{ empleado.nombre + " "+empleado.apellido1+" "+empleado.apellido2}}</td>
+              <td>{{ empleado.nombre ||''+ " "+empleado.apellido1||''+" "+empleado.apellido2||''}}</td>
               <td>{{ empleado.telefono ||"No proporcionado" }}</td>
               <td>{{ empleado.email ||"No proporcionado" }}</td>
               <td>
