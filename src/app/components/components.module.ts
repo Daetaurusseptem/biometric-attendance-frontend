@@ -21,6 +21,15 @@ import { TabsMenuComponent } from './shared/tabs-menu/tabs-menu.component';
 import { ItemsListComponent } from './shared/items-list/items-list.component';
 import { LoadingDataSpinnerComponent } from './shared/loading-data-spinner/loading-data-spinner.component';
 import { SpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { AsistenciaDialogComponent } from './shared/asistencia-dialog/asistencia-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MenuComponent } from './shared/menu/menu.component';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatListModule} from '@angular/material/list';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 
 
 
@@ -35,7 +44,9 @@ import { SpinnerComponent } from './shared/loading-spinner/loading-spinner.compo
     SpinnerComponent,
     LoadingDataSpinnerComponent,
     ItemsListComponent,
-    TabsMenuComponent
+    TabsMenuComponent,
+    AsistenciaDialogComponent,
+    MenuComponent
   ],
   exports:[
     NavbarComponent,
@@ -56,7 +67,13 @@ import { SpinnerComponent } from './shared/loading-spinner/loading-spinner.compo
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatExpansionModule,
+    MatListModule,
+    MatProgressSpinnerModule
     
   ]
 })

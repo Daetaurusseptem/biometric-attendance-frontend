@@ -17,6 +17,7 @@ import { DepartmentDetailsComponent } from './departamentos/department-details/d
 import {MatDividerModule} from '@angular/material/divider';
 import {MatTableModule} from '@angular/material/table';
 import { EmpleadosAttendancesComponent } from './empleados/empleados-attendances/empleados-attendances.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { EmpleadosAttendancesComponent } from './empleados/empleados-attendances
     NgSelectModule,
     ComponentsModule,
     MatDividerModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule
     
   ]
 })

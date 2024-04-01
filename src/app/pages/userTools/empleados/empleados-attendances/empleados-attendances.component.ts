@@ -1,15 +1,27 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
+import * as dayjs from 'dayjs';
+
 import { map, pipe } from 'rxjs';
-import { Empleado } from 'src/app/interfaces/models.interface';
+import { AsistenciaDialogComponent } from 'src/app/components/shared/asistencia-dialog/asistencia-dialog.component';
+import { Asistencia, Empleado } from 'src/app/interfaces/models.interface';
 import { AsistenciasService } from 'src/app/services/asistencias.service';
 import { AuthService } from 'src/app/services/auth.service';
 
+interface DiaConDiaSemana {
+  dia: number;
+  diaSemana: string;
+}
 @Component({
   selector: 'app-empleados-attendances',
   templateUrl: './empleados-attendances.component.html',
   styleUrls: ['./empleados-attendances.component.css']
 })
 export class EmpleadosAttendancesComponent {
+
+  
+
   // Dentro de la clase AsistenciasComponent
   months = [
     { name: 'Enero', value: '1' },
@@ -26,6 +38,8 @@ export class EmpleadosAttendancesComponent {
     { name: 'Diciembre', value: '12' }
   ];
 
+  diasSemana = [{index:'Sun',dia:'Dom'}, {index:'Mon',dia:'Lun'}, {index:'Tue',dia:'Mar'}, {index:'Wed',dia:'Mié'}, {index:'Thu',dia:'Jue'}, {index:'Fri',dia:'Vie'}, {index:'Sat',dia:'Sáb'}];
+  cargado =false
   
   page: number = 1; // Página actual
   limit: number = 10; // Número de empleados por página
@@ -48,6 +62,7 @@ export class EmpleadosAttendancesComponent {
   constructor(
     private asistenciasService: AsistenciasService,
     private authService: AuthService,
+    public dialog: MatDialog
     ) {
     console.log(this.selectedMonth);
     const currentDate = new Date();
@@ -63,23 +78,52 @@ export class EmpleadosAttendancesComponent {
 
   
   actualizarAsistencias() {
+    this.cargado = false
+    console.log(this.selectedMonth, this.selectedYear, this.page, this.limit);
     this.asistenciasService.getAsistenciasMes(this.empresaId!, this.selectedMonth, this.selectedYear, this.page, this.limit)
       .subscribe((response: any) => {
         this.employees = response.empleados; // Asume que el backend responde con un objeto que incluye los empleados
         this.totalEmpleados = response.totalEmpleados; // Asume que el backend también responde con el total de empleados
-        console.log(this.totalEmpleados);
+        console.log(this.employees);
+        this.cargado = true
       });
+      
   }
 
-  diasDelMes(mes: number, anio: number): number[] {
-    // Generar un arreglo con los días del mes seleccionado
-    let dias = new Date(anio, mes, 0).getDate();
-    return Array.from({ length: dias }, (_, i) => i + 1);
+  abrirDialogoAsistencia(asistencia: any, fecha?:object): void {
+    const dialogRef = this.dialog.open(AsistenciaDialogComponent, {
+      width: '250px',
+      data: {
+        asistencia: asistencia,
+        fecha
+      }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('El diálogo fue cerrado', result);
+      // Aquí puedes actualizar el estado de la asistencia si es necesario
+    });
+  }
+
+  diasDelMes(mes: number, anio: number): DiaConDiaSemana[] {
+    const dias = new Date(anio, mes, 0).getDate();
+    const diasConDiaSemana: DiaConDiaSemana[] = [];
+    for (let i = 1; i <= dias; i++) {
+      const fecha = new Date(anio, mes - 1, i); // Los meses en JavaScript son 0-indexados
+      const diaSemana = dayjs(fecha).format('ddd'); // Formato abreviado del día de la semana
+      const prueba =this.diasSemana.find(dia=>dia.index==dayjs(fecha).format('ddd')?dia.index:'')
+      
+      diasConDiaSemana.push({
+        dia: i,
+        diaSemana:prueba?.dia!,
+      });
+    }
+    return diasConDiaSemana;
   }
 
 
+  obtenerAsistencia(empleadoId: string, dia: number, mes: number, anio: number, asistencia?:boolean): string|Asistencia {
 
-  obtenerAsistencia(empleadoId: string, dia: number, mes: number, anio: number): string {
     // Encuentra al empleado basado en su ID
     const empleado = this.employees.find(emp => emp._id === empleadoId);
     if (!empleado || !empleado.asistencias) return 'desconocido';
@@ -87,19 +131,39 @@ export class EmpleadosAttendancesComponent {
     // Filtra las asistencias del empleado para el día específico
     const asistenciaDelDia = empleado.asistencias.find(asist => {
       const fechaAsistencia = new Date(asist.entrada);
+      
       return fechaAsistencia.getDate() === dia && fechaAsistencia.getMonth() + 1 === mes && fechaAsistencia.getFullYear() === anio;
     });
-  
+    
     if (!asistenciaDelDia) return 'inasistencia'; // Si no hay registro, es una inasistencia
     return asistenciaDelDia.tipo; // 'asistencia', 'inconsistencia', etc.
   }
 
-  cambiarPagina(nuevaPagina: number) {
-    if (nuevaPagina < 1 || nuevaPagina > Math.ceil(this.totalEmpleados / this.limit)) {
-      return; // No hacer nada si la página es inválida
-    }
-    this.page = nuevaPagina;
-    this.actualizarAsistencias(); // Volver a cargar las asistencias con la nueva página
+  obtenerAsistenciaData(empleadoId: string, dia: number, mes: number, anio: number): string|object {
+    // Encuentra al empleado basado en su ID
+    const empleado = this.employees.find(emp => emp._id === empleadoId);
+    if (!empleado || !empleado.asistencias) return 'desconocido';
+  
+    // Filtra las asistencias del empleado para el día específico
+    const asistenciaDelDia = empleado.asistencias.find(asist => {
+      const fechaAsistencia = new Date(asist.entrada);
+      
+      return fechaAsistencia.getDate() === dia && fechaAsistencia.getMonth() + 1 === mes && fechaAsistencia.getFullYear() === anio;
+    });
+    
+    if (!asistenciaDelDia) return {tipo:'inasistencia', fecha: new Date(anio, mes, dia)}; // Si no hay registro, es una inasistencia
+    return {tipo:asistenciaDelDia.tipo,entrada: asistenciaDelDia.entrada, salida:asistenciaDelDia.salida, empleado:asistenciaDelDia.empleado,idAsistencia:asistenciaDelDia._id, fecha: new Date(dia, mes, anio)}; // 'asistencia', 'inconsistencia', etc.
+  }
+
+
+  cambiarPagina(event: PageEvent) {
+    
+    this.page= event.pageIndex+1;
+
+    this.limit = event.pageSize+1;
+  
+    // Actualizar la lógica para cargar los empleados basada en pageIndex y pageSize
+    this.actualizarAsistencias();
   }
  
 }

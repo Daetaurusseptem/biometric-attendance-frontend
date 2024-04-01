@@ -16,8 +16,8 @@ export class AsistenciasService {
   getAsistenciasMes(empresaId: string, month: number, year: number, page:number, limit:number) {
     // Reemplaza con la lógica adecuada para realizar la petición al backend
 
-    console.log(empresaId,month, year, page );
-    return this.http.get<itemResponse>(`${this.baseURL}/asistencias/mensuales/${empresaId}?page=${page}&limit=${10}&month=${month}&year=${year}&limit=${limit}`);
+    console.log(typeof empresaId,typeof month, typeof year, typeof page );
+    return this.http.get<itemResponse>(`${this.baseURL}/asistencias/mensuales/${empresaId}?page=${page}&limit=${limit}&month=${month}&year=${year}&limit=${limit}`);
   }
 
   obtenerAsistencia(empleado: Empleado, dia: Date): string {

@@ -18,6 +18,7 @@ import { NavbarComponent } from './components/shared/navbar/navbar.component';
 import { ComponentsModule } from './components/components.module';
 import { SysAdmintoolsModule } from './pages/sysAdminTools/sys-admintools.module';
 import { UserToolModule } from './pages/userTools/user-tool.module';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { UserToolModule } from './pages/userTools/user-tool.module';
     UserToolModule,
     ComponentsModule,
     HttpClientModule,
+    MatPaginatorModule
     
   ],
   providers: [],

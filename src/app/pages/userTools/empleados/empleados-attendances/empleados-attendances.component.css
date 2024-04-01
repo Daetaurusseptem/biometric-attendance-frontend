@@ -1,6 +1,13 @@
-.sticky-column {
+.sticky-column-first {
   position: sticky;
   left: 0;
+  background-color: white;
+  z-index: 2;
+  
+}
+.sticky-column-second {
+  position: sticky;
+  left: 2.2rem;
   background-color: white;
   z-index: 1;
   

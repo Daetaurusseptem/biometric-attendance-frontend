@@ -4,7 +4,7 @@ export interface Asistencia {
     empleado: string; // Referencia al ID de Empleado
     entrada: Date;
     salida: Date;
-    tipo: 'asistencia' | 'falta' | 'vacaciones' | 'permiso';
+    tipo: 'asistencia' | 'falta' | 'vacaciones' | 'permiso'|'inasistencia';
     detalles?: string;
   }
   

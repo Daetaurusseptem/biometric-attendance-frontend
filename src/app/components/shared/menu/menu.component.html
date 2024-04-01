@@ -1,0 +1,13 @@
+<mat-accordion multi="true" *ngFor="let menu of menus">
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            {{menu.title}}
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+            <a  [routerLink]="item.url" *ngFor="let item of menu.submenu" mat-list-item>
+                <i class="{{item.icon}}"></i>
+                    <span class="">{{item.title}}  </span>
+            </a>
+        </mat-nav-list>
+    </mat-expansion-panel>
+</mat-accordion>

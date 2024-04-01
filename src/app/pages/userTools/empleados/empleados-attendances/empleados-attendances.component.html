@@ -21,40 +21,51 @@
   <div class="row">
     <div class="col-12">
       <!-- Tabla de Asistencias -->
-      <div class="card">
+      <div  class="card">
+        <app-spinner *ngIf="!cargado" ></app-spinner>
+      </div>
+      <div  class="card">
         <div class="card-body">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-              <li class="page-item cursor" [class.disabled]="page === 1">
-                <a class="page-link"  (click)="cambiarPagina(page - 1)">Anterior</a>
-              </li>
-              <!-- Podrías añadir elementos de página específicos aquí -->
-              <li class="page-item cursor" [class.disabled]="page * limit >= totalEmpleados">
-                <a class="page-link"  (click)="cambiarPagina(page + 1)">Siguiente</a>
-              </li>
-            </ul>
-          </nav>
+       
+          <mat-paginator 
+              [length]="totalEmpleados"
+               [pageSize]="10"
+               [pageSizeOptions]="[5, 10, 20, totalEmpleados]"
+               (page)="cambiarPagina($event)">
+          </mat-paginator>
           <div class="table-responsive">
             <table class="table table-striped table-bordered">
               <thead>
                 <tr>
-                  <th class="sticky-column">Nombre</th>
+                  <th class="sticky-column-first">Id</th>
+                  <th class="sticky-column-second">Nombre</th>
                   <!-- Generar dinámicamente los encabezados de los días del mes -->
                   <ng-container *ngFor="let dia of diasDelMes(selectedMonth, selectedYear)">
-                    <th class="table-light">{{ dia }}</th>
+                    <th class="table-light">{{ dia.dia }}</th>
                   </ng-container>
+                  
+                </tr>
+                <tr>
+                  <th class="sticky-column-first"></th>
+                  <th class="sticky-column-second"></th>
+                  <ng-container *ngFor="let dia of diasDelMes(selectedMonth, selectedYear)">
+                    <th class="table-light">{{ dia.diaSemana }}</th>
+                  </ng-container>
+                  
                 </tr>
               </thead>
               <tbody>
                 <tr  *ngFor="let empleado of employees">
-                  <td class="sticky-column">{{ empleado.nombre + " " + empleado.apellido1 + " " + empleado.apellido2 }}</td>
+                  <td class="sticky-column-first">{{ empleado.uidBiometrico}}</td>
+                  <td class="sticky-column-second">{{ empleado.nombre}}</td>
                   <!-- Generar dinámicamente las celdas de asistencia para cada día -->
                   <ng-container *ngFor="let dia of diasDelMes(selectedMonth, selectedYear)">
-                    <td [ngClass]="{
-                      'table-success': obtenerAsistencia(empleado._id!, dia, selectedMonth, selectedYear) === 'asistencia',
-                      'table-warning': obtenerAsistencia(empleado._id!, dia, selectedMonth, selectedYear) === 'inconsistencia',
-                      'table-danger': obtenerAsistencia(empleado._id!, dia, selectedMonth, selectedYear) === 'inasistencia'
-                    }">{{ obtenerAsistencia(empleado._id!, dia, selectedMonth, selectedYear) }}</td>
+
+                    <td class="pointer"  (click)="abrirDialogoAsistencia(obtenerAsistenciaData(empleado._id!, dia.dia, selectedMonth, selectedYear))"  [ngClass]="{
+                      'table-success': obtenerAsistencia(empleado._id!, dia.dia, selectedMonth, selectedYear) === 'asistencia',
+                      'table-warning': obtenerAsistencia(empleado._id!, dia.dia, selectedMonth, selectedYear) === 'inconsistencia',
+                      'table-danger': obtenerAsistencia(empleado._id!, dia.dia, selectedMonth, selectedYear) === 'inasistencia'
+                    }">{{ obtenerAsistencia(empleado._id!, dia.dia, selectedMonth, selectedYear) }}</td>
                   </ng-container>
                 </tr>
               </tbody>

@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Detalle de Asistencia</h1>
+<mat-dialog-content>
+  <p>Fecha: {{data.asistencia.fecha}}</p>
+  <p>Hora: {{data.asistencia.hora}}</p>
+  <mat-form-field>
+    <mat-label>Estado</mat-label>
+    <mat-select [(value)]="data.asistencia.estado">
+      <mat-option value="asistencia">Asistencia</mat-option>
+      <mat-option value="inasistencia">Inasistencia</mat-option>
+      <mat-option value="inconsistencia">Inconsistencia</mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-button [mat-dialog-close]="data">Guardar</button>
+</mat-dialog-actions>
