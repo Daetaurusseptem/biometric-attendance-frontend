@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import * as dayjs from 'dayjs';
@@ -24,22 +24,22 @@ export class EmpleadosAttendancesComponent {
 
   // Dentro de la clase AsistenciasComponent
   months = [
-    { name: 'Enero', value: '1' },
-    { name: 'Febrero', value: '2' },
-    { name: 'Marzo', value: '3' },
-    { name: 'Abril', value: '4' },
-    { name: 'Mayo', value: '5' },
-    { name: 'Junio', value: '6' },
-    { name: 'Julio', value: '7' },
-    { name: 'Agosto', value: '8' },
-    { name: 'Septiembre', value: '9' },
-    { name: 'Octubre', value: '10' },
-    { name: 'Noviembre', value: '11' },
-    { name: 'Diciembre', value: '12' }
+    { name: 'Enero', value: 1 },
+    { name: 'Febrero', value: 2 },
+    { name: 'Marzo', value: 3 },
+    { name: 'Abril', value: 4 },
+    { name: 'Mayo', value: 5 },
+    { name: 'Junio', value: 6 },
+    { name: 'Julio', value: 7 },
+    { name: 'Agosto', value: 8 },
+    { name: 'Septiembre', value:  9 },
+    { name: 'Octubre', value: 10 },
+    { name: 'Noviembre', value: 11 },
+    { name: 'Diciembre', value: 12 }
   ];
 
   diasSemana = [{index:'Sun',dia:'Dom'}, {index:'Mon',dia:'Lun'}, {index:'Tue',dia:'Mar'}, {index:'Wed',dia:'Mié'}, {index:'Thu',dia:'Jue'}, {index:'Fri',dia:'Vie'}, {index:'Sat',dia:'Sáb'}];
-  cargado =false
+  cargado = false
   
   page: number = 1; // Página actual
   limit: number = 10; // Número de empleados por página
@@ -62,7 +62,8 @@ export class EmpleadosAttendancesComponent {
   constructor(
     private asistenciasService: AsistenciasService,
     private authService: AuthService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private cdr: ChangeDetectorRef
     ) {
     console.log(this.selectedMonth);
     const currentDate = new Date();
@@ -82,10 +83,11 @@ export class EmpleadosAttendancesComponent {
     console.log(this.selectedMonth, this.selectedYear, this.page, this.limit);
     this.asistenciasService.getAsistenciasMes(this.empresaId!, this.selectedMonth, this.selectedYear, this.page, this.limit)
       .subscribe((response: any) => {
-        this.employees = response.empleados; // Asume que el backend responde con un objeto que incluye los empleados
+        this.employees = [...response.empleados]; // Asume que el backend responde con un objeto que incluye los empleados
         this.totalEmpleados = response.totalEmpleados; // Asume que el backend también responde con el total de empleados
         console.log(this.employees);
         this.cargado = true
+        this.cdr.detectChanges();
       });
       
   }
@@ -121,21 +123,20 @@ export class EmpleadosAttendancesComponent {
     return diasConDiaSemana;
   }
 
-
-  obtenerAsistencia(empleadoId: string, dia: number, mes: number, anio: number, asistencia?:boolean): string|Asistencia {
-
+  obtenerAsistencia(empleadoId: string, dia: number, mes: number, anio: number): string {
     // Encuentra al empleado basado en su ID
+   
     const empleado = this.employees.find(emp => emp._id === empleadoId);
     if (!empleado || !empleado.asistencias) return 'desconocido';
   
     // Filtra las asistencias del empleado para el día específico
     const asistenciaDelDia = empleado.asistencias.find(asist => {
       const fechaAsistencia = new Date(asist.entrada);
-      
-      return fechaAsistencia.getDate() === dia && fechaAsistencia.getMonth() + 1 === mes && fechaAsistencia.getFullYear() === anio;
+      return fechaAsistencia.getDate() === dia && fechaAsistencia.getMonth()=== mes && fechaAsistencia.getFullYear() === anio;
     });
     
     if (!asistenciaDelDia) return 'inasistencia'; // Si no hay registro, es una inasistencia
+    
     return asistenciaDelDia.tipo; // 'asistencia', 'inconsistencia', etc.
   }
 
@@ -148,7 +149,7 @@ export class EmpleadosAttendancesComponent {
     const asistenciaDelDia = empleado.asistencias.find(asist => {
       const fechaAsistencia = new Date(asist.entrada);
       
-      return fechaAsistencia.getDate() === dia && fechaAsistencia.getMonth() + 1 === mes && fechaAsistencia.getFullYear() === anio;
+      return fechaAsistencia.getDate() === dia && fechaAsistencia.getMonth() === mes && fechaAsistencia.getFullYear() === anio;
     });
     
     if (!asistenciaDelDia) return {tipo:'inasistencia', fecha: new Date(anio, mes, dia)}; // Si no hay registro, es una inasistencia
@@ -165,5 +166,6 @@ export class EmpleadosAttendancesComponent {
     // Actualizar la lógica para cargar los empleados basada en pageIndex y pageSize
     this.actualizarAsistencias();
   }
+  
  
 }

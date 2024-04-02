@@ -62,10 +62,10 @@
                   <ng-container *ngFor="let dia of diasDelMes(selectedMonth, selectedYear)">
 
                     <td class="pointer"  (click)="abrirDialogoAsistencia(obtenerAsistenciaData(empleado._id!, dia.dia, selectedMonth, selectedYear))"  [ngClass]="{
-                      'table-success': obtenerAsistencia(empleado._id!, dia.dia, selectedMonth, selectedYear) === 'asistencia',
-                      'table-warning': obtenerAsistencia(empleado._id!, dia.dia, selectedMonth, selectedYear) === 'inconsistencia',
-                      'table-danger': obtenerAsistencia(empleado._id!, dia.dia, selectedMonth, selectedYear) === 'inasistencia'
-                    }">{{ obtenerAsistencia(empleado._id!, dia.dia, selectedMonth, selectedYear) }}</td>
+                      'table-success': obtenerAsistencia(empleado._id!, dia.dia, selectedMonth-1, selectedYear) === 'asistencia',
+                      'table-warning': obtenerAsistencia(empleado._id!, dia.dia, selectedMonth-1, selectedYear) === 'inconsistencia',
+                      'table-danger': obtenerAsistencia(empleado._id!, dia.dia, selectedMonth-1, selectedYear) === 'inasistencia'
+                    }">{{ obtenerAsistencia(empleado._id!, dia.dia, selectedMonth-1, selectedYear) }}</td>
                   </ng-container>
                 </tr>
               </tbody>
