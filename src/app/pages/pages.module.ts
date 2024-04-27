@@ -12,6 +12,12 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { DashboardPageComponent } from './dashboard/dashboard-page/dashboard-page.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSelectModule} from '@angular/material/select';
+
+
+
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { NgChartsModule } from 'ng2-charts';
 
 
 
@@ -34,7 +40,11 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     NgSelectModule,
     RouterLink,
     MatInputModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    NgChartsModule
+    
     
   ]
 })

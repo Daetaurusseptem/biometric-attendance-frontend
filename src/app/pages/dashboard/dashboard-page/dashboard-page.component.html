@@ -37,6 +37,13 @@
       <button [routerLink]="['sysadmin/users']">Gestionar Usuarios</button>
       <!-- Más controles -->
     </div>
-    <!-- Secciones adicionales según sea necesario -->
+    <div class="chart-container">
+      <canvas baseChart
+              [datasets]="chartData.datasets"
+              [labels]="chartData.labels"
+              [options]="chartOptions"
+              chartType="bar">
+      </canvas>
+    </div>
   </div>
   

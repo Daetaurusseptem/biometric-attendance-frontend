@@ -18,6 +18,10 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatTableModule} from '@angular/material/table';
 import { EmpleadosAttendancesComponent } from './empleados/empleados-attendances/empleados-attendances.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { AddEmployeeDepartmentComponent } from './add-employee-department/add-employee-department.component';
+import { SchedulesDepartmentComponent } from './schedules-department/schedules-department.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -31,7 +35,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     CreateEmpleadoComponent,
     EmpleadoDetailsComponent,
     DepartmentDetailsComponent,
-    EmpleadosAttendancesComponent
+    EmpleadosAttendancesComponent,
+    AddEmployeeDepartmentComponent,
+    SchedulesDepartmentComponent
   ],
   exports: [
     DepartamentosListComponent,
@@ -52,7 +58,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ComponentsModule,
     MatDividerModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatSelectModule
     
   ]
 })

@@ -27,7 +27,7 @@ export interface Asistencia {
     telefono: string;
     email: string;
     empresa: string; // Referencia al ID de Empresa
-    departamento: string; // Referencia al ID de Departamento
+    departamento: string|Departamento; // Referencia al ID de Departamento
     fechaIngreso?: Date;
     numeroEmpleado: string;
     posicion?: string;

@@ -19,6 +19,9 @@ import { ComponentsModule } from './components/components.module';
 import { SysAdmintoolsModule } from './pages/sysAdminTools/sys-admintools.module';
 import { UserToolModule } from './pages/userTools/user-tool.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+
+import { NgChartsModule } from 'ng2-charts';
 
 
 @NgModule({
@@ -41,7 +44,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     UserToolModule,
     ComponentsModule,
     HttpClientModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    NgxMaterialTimepickerModule,
+    NgChartsModule
+
     
   ],
   providers: [],

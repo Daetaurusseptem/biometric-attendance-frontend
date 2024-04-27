@@ -4,10 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 
 import { map } from 'rxjs';
-import { Empleado } from 'src/app/interfaces/models.interface';
+import { Departamento, Empleado } from 'src/app/interfaces/models.interface';
 import { AuthService } from 'src/app/services/auth.service';
+import { DepartamentosService } from 'src/app/services/departamentos.service';
 import { EmpleadosService } from 'src/app/services/empleados.service';
 import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-edit-empleado',
@@ -18,8 +20,10 @@ import Swal from 'sweetalert2';
 export class EditEmpleadoComponent {
 
   employee!: Empleado;
+  departamentos!: Departamento[];
   id: string = '';
-
+  empresaId=''
+  depSelected!:Departamento
   loaded=false;
 
 
@@ -36,20 +40,27 @@ export class EditEmpleadoComponent {
     fechaIngreso:[Validators.min(4), Validators.maxLength(50)],
     posicion:[Validators.min(4), Validators.maxLength(50)],
     
+    
   }
   );
 
   constructor(
     private empleadoService: EmpleadosService,
+    private departamentosService: DepartamentosService,
     private authService: AuthService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private router: Router
   ) {
+    this.empresaId = authService.empresa._id!
     this.activatedRoute.params.subscribe(params => {
       this.id = params['id'];
       this.getEmployee(this.id);
     })
+
+    this.getDepartamentosEmpresa(this.empresaId)
+
+
   }
 
   getEmployee(id: string) {
@@ -64,8 +75,8 @@ export class EditEmpleadoComponent {
         console.log(empleado);
         
         this.employee = empleado!;
-        
-        console.log(this.employee);
+        this.depSelected = this.employee.departamento as Departamento
+        console.log('dep',this.depSelected);
         console.log( dayjs(this.employee.fechaIngreso).format('YYYY-MM-DD'));
         this.employeeForm.setValue({    
           
@@ -89,6 +100,19 @@ export class EditEmpleadoComponent {
 
   }
 
+  getDepartamentosEmpresa(id:string){
+    this.departamentosService.getDepartamentosEmpresa(id)
+    .pipe(
+      map(item=>item.departamentos)
+    )
+    .subscribe(
+      departamentos=>{
+        this.departamentos = departamentos!
+        console.log(departamentos);
+      }
+    )
+
+  }
 
   updateUser() {
     if (this.employeeForm.valid) {
@@ -124,4 +148,5 @@ export class EditEmpleadoComponent {
       return false;
     }
   }
+
 }

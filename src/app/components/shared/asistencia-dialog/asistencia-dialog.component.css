@@ -1,0 +1,4 @@
+.ngx-material-timepicker-container {
+    z-index: 1500 !important; 
+    position: relative;
+  }

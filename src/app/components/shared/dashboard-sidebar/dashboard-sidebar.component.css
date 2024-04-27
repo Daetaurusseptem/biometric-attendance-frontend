@@ -1,12 +1,14 @@
 .sidebar-container {
-  min-height: 40vh; /* Altura completa */
+  min-height: 35vh; /* Altura completa */
   width: 200px; /* Ancho del sidebar */
   flex-shrink: 0;
 }
 
 .sidebar-header {
   /* Estilos para el encabezado */
+
 }
+
 
 .sidebar-nav {
   /* Estilos para la navegación */
@@ -28,7 +30,7 @@
   align-items: center;
   padding: 0.5rem 1.5rem;
   text-decoration: none;
-  color: #333;
+  color: #4237e6;
 }
 
 .sidebar-link:hover, .sidebar-link:focus {

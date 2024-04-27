@@ -29,8 +29,5 @@ constructor(
     
 }
 
-logOut(){
-  this.authServices.borrarLocalStorage();
-  this.router.navigateByUrl('login')
-}
+
 }

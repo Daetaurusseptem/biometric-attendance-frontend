@@ -2,12 +2,16 @@
     <mat-expansion-panel>
         <mat-expansion-panel-header>
             {{menu.title}}
-        </mat-expansion-panel-header>
+        </mat-expansion-panel-header >
         <mat-nav-list>
             <a  [routerLink]="item.url" *ngFor="let item of menu.submenu" mat-list-item>
                 <i class="{{item.icon}}"></i>
-                    <span class="">{{item.title}}  </span>
+                <span class="">{{item.title}}  </span>
             </a>
+            <a  mat-list-item (click)="logOut()">
+                
+                <i class="bi bi-power"></i>
+                Cerrar Sesion</a>
         </mat-nav-list>
     </mat-expansion-panel>
 </mat-accordion>

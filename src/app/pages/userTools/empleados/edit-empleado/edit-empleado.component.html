@@ -1,65 +1,78 @@
 <div class="container mt-3 ">
-    
-    <div *ngIf="loaded==true" class="card">
-        <div class="card-header">
-            <div class="card-title text-center">
-                <h2>Editar Usuario</h2>
-            </div>
-        </div>
-        <div class="card-body">
-             <form [formGroup]="employeeForm" (ngSubmit)="updateUser()">
-      
-      <!-- Nombre de Usuario -->
-      <div class="mb-3">
-        <label for="username" class="form-label">Nombre de Empleado</label>
-        <input type="text" class="form-control" id="nombre" formControlName="nombre">
-      </div>
-      <div class="mb-3">
-        <label for="apellido1" class="form-label">Apellido Paterno</label>
-        <input type="text" class="form-control" id="apellido1" formControlName="apellido1">
-      </div>
-      <div class="mb-3">
-        <label for="apellido2" class="form-label">Apellido Materno</label>
-        <input type="text" class="form-control" id="apellido2" formControlName="apellido2">
-      </div>
-      <div class="mb-3">
-        <label for="direccion" class="form-label">Direccion</label>
-        <input type="text" class="form-control" id="direccion" formControlName="direccion">
-      </div>
-      <div class="mb-3">
-        <label for="telefono" class="form-label">Telefono</label>
-        <input type="tel" class="form-control" id="telefono" formControlName="telefono">
-      </div>
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" formControlName="email">
-      </div>
-      <div class="mb-3">
-        <label for="fechaIngreso" class="form-label">Fecha Ingreso</label>
-        <input type="date" class="form-control" id="fechaIngreso" formControlName="fechaIngreso">
-      </div>
-      <div class="mb-3">
-        <label for="posicion" class="form-label">Posicion en la empresa</label>
-        <input type="text" class="form-control" id="posicion" formControlName="posicion">
-      </div>
-      
 
-      
-      
-  
-      
-      <div *ngIf="employeeForm.invalid">
-        <p *ngIf="campoNoValidoDatosUsuario('name')" class="text-danger">Nombre invalido</p>
-        <p *ngIf="campoNoValidoDatosUsuario('username')" class="text-danger">Nombre de usuario invalido</p>
-        <p *ngIf="campoNoValidoDatosUsuario('role')" class="text-danger">Role invalido</p>
-        
-  
+  <div *ngIf="loaded==true" class="card">
+    <div class="card-header">
+      <div class="card-title text-center">
+        <h2>Editar Usuario</h2>
       </div>
-  
-      <!-- Botón para guardar los cambios -->
-      <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-    </form>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="employeeForm" (ngSubmit)="updateUser()">
+
+        <!-- Nombre de Usuario -->
+        <div class="mb-3">
+          <label for="username" class="form-label">Nombre de Empleado</label>
+          <input type="text" class="form-control" id="nombre" formControlName="nombre">
         </div>
+        <div class="mb-3">
+          <label for="apellido1" class="form-label">Apellido Paterno</label>
+          <input type="text" class="form-control" id="apellido1" formControlName="apellido1">
+        </div>
+        <div class="mb-3">
+          <label for="apellido2" class="form-label">Apellido Materno</label>
+          <input type="text" class="form-control" id="apellido2" formControlName="apellido2">
+        </div>
+        <div class="mb-3">
+          <label for="direccion" class="form-label">Direccion</label>
+          <input type="text" class="form-control" id="direccion" formControlName="direccion">
+        </div>
+        <div class="mb-3">
+          <label for="telefono" class="form-label">Telefono</label>
+          <input type="tel" class="form-control" id="telefono" formControlName="telefono">
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" formControlName="email">
+        </div>
+        <div class="mb-3">
+          <label for="fechaIngreso" class="form-label">Fecha Ingreso</label>
+          <input type="date" class="form-control" id="fechaIngreso" formControlName="fechaIngreso">
+        </div>
+        <div class="mb-3">
+          <label for="posicion" class="form-label">Posicion en la empresa</label>
+          <input type="text" class="form-control" id="posicion" formControlName="posicion">
+        </div>
+        <div class="mb-3">
+          <mat-form-field style="border-color: transparent;" class="form-control">
+            <mat-label>Departamento</mat-label>
+            <mat-select formControlName="departamento" [(ngModel)]="depSelected._id">
+    
+              <mat-option 
+                *ngFor="let departamento of departamentos"
+                [value]="departamento._id"
+
+                >{{departamento.nombre}}</mat-option>
+                  
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+
+
+
+
+
+        <div *ngIf="employeeForm.invalid">
+          <p *ngIf="campoNoValidoDatosUsuario('name')" class="text-danger">Nombre invalido</p>
+          <p *ngIf="campoNoValidoDatosUsuario('username')" class="text-danger">Nombre de usuario invalido</p>
+          <p *ngIf="campoNoValidoDatosUsuario('role')" class="text-danger">Role invalido</p>
+
+
+        </div>
+
+        <!-- Botón para guardar los cambios -->
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+      </form>
     </div>
   </div>
-  
+</div>

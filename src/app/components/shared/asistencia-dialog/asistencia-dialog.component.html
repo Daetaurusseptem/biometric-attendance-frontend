@@ -1,17 +1,34 @@
 <h1 mat-dialog-title>Detalle de Asistencia</h1>
 <mat-dialog-content>
-  <p>Fecha: {{data.asistencia.fecha}}</p>
-  <p>Hora: {{data.asistencia.hora}}</p>
+
+  <section class="hours-forms mb-2 ">
+    <label for="entrada"> Entrada</label>
+
+    <input class="form-control cursor" [placeholder]="horaEntrada" aria-label="entrada"
+      [ngxTimepicker]="defaultTimeEntrada" [format]="24" readonly>
+    <ngx-material-timepicker #defaultTimeEntrada [defaultTime]="horaEntrada||'00:00'"></ngx-material-timepicker>
+
+    <label for="salida"> Salida</label>
+
+    <input class="form-control cursor" [placeholder]="horaSalida" aria-label="salida"
+      [ngxTimepicker]="defaultTimeSalida" [format]="24" readonly>
+    <ngx-material-timepicker #defaultTimeSalida [defaultTime]="horaSalida"></ngx-material-timepicker>
+    <label class="mt-2" for="detalles">Detalles</label>
+    <textarea [(ngModel)]="this.detalles" class="form-control" style="resize: none;" name="detalles" id="" cols="20" rows="5"></textarea>
+  </section>
   <mat-form-field>
+
+
     <mat-label>Estado</mat-label>
-    <mat-select [(value)]="data.asistencia.estado">
+    <mat-select  [(value)]="this.data.fecha.tipo">
       <mat-option value="asistencia">Asistencia</mat-option>
       <mat-option value="inasistencia">Inasistencia</mat-option>
       <mat-option value="inconsistencia">Inconsistencia</mat-option>
     </mat-select>
   </mat-form-field>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancelar</button>
-  <button mat-button [mat-dialog-close]="data">Guardar</button>
+<mat-dialog-actions align="center">
+  <button class="btn btn-danger me-2" mat-button mat-dialog-close>Cancelar</button>
+  <button class="btn btn-primary" mat-button
+    (click)="editarAsistencia(this.data.fecha.asistenciaId, {entrada:defaultTimeEntrada, salida:defaultTimeSalida, tipo:this.data.fecha.tipo, detalles: this.fechaObj.detalles })">Guardar</button>
 </mat-dialog-actions>

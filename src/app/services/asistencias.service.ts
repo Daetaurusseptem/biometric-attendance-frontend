@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { itemResponse } from '../interfaces/itemResponse.interface';
-import { Empleado } from '../interfaces/models.interface';
+import { Asistencia, Empleado } from '../interfaces/models.interface';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,10 @@ import { Empleado } from '../interfaces/models.interface';
 export class AsistenciasService {
   private baseURL: string = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private authService:AuthService
+  ) { }
 
   getAsistenciasMes(empresaId: string, month: number, year: number, page:number, limit:number) {
     // Reemplaza con la lógica adecuada para realizar la petición al backend
@@ -20,14 +24,14 @@ export class AsistenciasService {
     return this.http.get<itemResponse>(`${this.baseURL}/asistencias/mensuales/${empresaId}?page=${page}&limit=${limit}&month=${month}&year=${year}&limit=${limit}`);
   }
 
-  obtenerAsistencia(empleado: Empleado, dia: Date): string {
-    const fecha = new Date(dia).setHours(0, 0, 0, 0);
-    const asistenciaDelDia = empleado.asistencias!.find(asistencia => {
-      const entrada = new Date(asistencia.entrada).setHours(0, 0, 0, 0);
-      return entrada === fecha;
-    });
-    
-    return asistenciaDelDia ? 'Asistió' : 'No Asistió';
-  }
+  updateAsistencia(idAsistencia:string, formData:FormData|{entrada:Date, salida:Date, tipo: 'asistencia' |'inasistencia'|'inconsistencia'}) {
+   
+    return this.http.put<itemResponse>(`${this.baseURL}/asistencias/${idAsistencia}`, formData, this.authService.headers );
+  };
+
+  createAsistencia(idEmpleado:string, asistencia:{entrada:Date,salida:Date, detalles:string }){
+    console.log(console.log(asistencia));
+    return this.http.post<itemResponse>(`${this.baseURL}/asistencias/${idEmpleado}`, asistencia, this.authService.headers);
+    };
   
 }
