@@ -1,49 +1,47 @@
-<div  class="dashboard sysadmin-dashboard">
-    <h2>DASHBOARD {{user.rol|uppercase}}</h2>
-    <div class="stats-panel">
-      <div class="stat">
-        <span>Total Usuarios</span>
-        <span>{{ numberOfUsers }}</span>
-      </div>
-      <div *ngIf="user.rol=='sysadmin'" class="stat" >
-        <span>Total Empresas</span>
-        <span>{{ numberOfCompanies}}</span>
-      </div>
-      <!-- Más estadísticas -->
+<div class="dashboard sysadmin-dashboard">
+  <h2>DASHBOARD {{user.rol|uppercase}}</h2>
+  <div class="stats-panel">
+    <div class="stat">
+      <span>Total Usuarios</span>
+      <span>{{ numberOfUsers }}</span>
     </div>
-    <div *ngIf="user.rol=='sysadmin'"  class="control-panel">
-      <button  [routerLink]="['sysadmin/companies']">Gestionar Empresas</button>
-      <button [routerLink]="['sysadmin/users']">Gestionar Usuarios</button>
-      <!-- Más controles -->
+    <div *ngIf="user.rol=='sysadmin'" class="stat">
+      <span>Total Empresas</span>
+      <span>{{ numberOfCompanies}}</span>
     </div>
-    <div *ngIf="user.rol=='admin'"  class="control-panel">
-      <button  [routerLink]="['admin/departments']">
-        <i class="bi bi-archive-fill"></i>
-        Gestionar Departamentos
-      </button>
-      <button [routerLink]="['admin/users']">
-        <i class="bi bi-person-circle"></i>
-        Gestionar Usuarios</button>
-      
-      <button [routerLink]="['admin/employees']">
-        <i class="bi bi-person-circle"></i>
-        Gestionar Empleados</button>
-      <button [routerLink]="['admin/employees/attendances']">
-        <i class="bi bi-calendar"></i>
-        Gestionar Asistencias</button>
-    </div>
-    <div *ngIf="user.rol=='user'"  class="control-panel">
-      <button  [routerLink]="['sysadmin/companies']">Gestionar Empresas</button>
-      <button [routerLink]="['sysadmin/users']">Gestionar Usuarios</button>
-      <!-- Más controles -->
-    </div>
-    <div class="chart-container">
-      <canvas baseChart
-              [datasets]="chartData.datasets"
-              [labels]="chartData.labels"
-              [options]="chartOptions"
-              chartType="bar">
-      </canvas>
-    </div>
+    <!-- Más estadísticas -->
   </div>
-  
+  <div *ngIf="user.rol=='sysadmin'" class="control-panel mb-2">
+    <button [routerLink]="['sysadmin/companies']">Gestionar Empresas</button>
+    <button [routerLink]="['sysadmin/users']">Gestionar Usuarios</button>
+    <!-- Más controles -->
+  </div>
+  <div *ngIf="user.rol=='admin'" class="control-panel mb-4">
+    <button [routerLink]="['admin/departments']">
+      <i class="bi bi-archive-fill"></i>
+      Gestionar Departamentos
+    </button>
+    <button [routerLink]="['admin/users']">
+      <i class="bi bi-person-circle"></i>
+      Gestionar Usuarios</button>
+
+    <button [routerLink]="['admin/employees']">
+      <i class="bi bi-person-circle"></i>
+      Gestionar Empleados</button>
+    <button [routerLink]="['admin/employees/attendances']">
+      <i class="bi bi-calendar"></i>
+      Gestionar Asistencias</button>
+  </div>
+  <div  *ngIf="user.rol=='user'" class="control-panel mb-2">
+    <button [routerLink]="['sysadmin/companies']">Gestionar Empresas</button>
+    <button [routerLink]="['sysadmin/users']">Gestionar Usuarios</button>
+    <!-- Más controles -->
+  </div>
+
+  <div *ngIf="authService.role !== 'sysadmin'" class="chart-container">
+    <h1>{{mesActual}} {{Currentyear}} </h1>
+    <canvas baseChart [datasets]="chartData.datasets" [labels]="chartData.labels" [options]="chartOptions"
+      chartType="bar">
+    </canvas>
+  </div> 
+</div>

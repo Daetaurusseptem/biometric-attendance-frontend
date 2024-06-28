@@ -143,7 +143,7 @@ export class EmpleadosListComponent {
   loadUsers() {
     const userRole = this.authService.usuario.rol;
     if (userRole == 'admin') {
-      this.empleadoService.getEmpleadosEmpresa(this.authService.empresa._id!)
+      this.empleadoService.getEmpleadosEmpresa(this.authService.empresaId!)
       .pipe(
         map(resp=>resp.empleados)
       )

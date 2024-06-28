@@ -24,7 +24,7 @@ ngOnInit(): void {
     this.id = params['id'];
         this.getDepartamento(this.id);
         console.log(this.departamento);
-        this.loadEmployees(this.authService.empresa._id!)
+        this.loadEmployees(this.authService.empresaId!)
   })
   
 }

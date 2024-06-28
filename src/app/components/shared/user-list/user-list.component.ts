@@ -41,11 +41,11 @@ export class UserListComponent {
     
   }
   getCompanyUsers(){
-    console.log( this.authService.getCompany);
-    this.company = this.authService.getCompany
-    this.companyId = this.company._id!;
+  
+    this.companyId = this.authService.empresaId!;
+
     console.log(this.companyId);
-    this.userService.getAllNonAdminUsersOfCompany(this.authService.getCompany._id!)
+    this.userService.getAllNonAdminUsersOfCompany(this.companyId)
       .pipe(  
         map(item => {
           console.log(item);

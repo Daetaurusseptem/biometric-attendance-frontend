@@ -7,6 +7,7 @@ import {  tap, Observable,of} from "rxjs";
 import {map,catchError} from "rxjs/operators";
 import { environment } from 'src/environments/environment';
 import { Empresa } from '../interfaces/models.interface';
+import { EmpresaService } from './company.service';
 
 const url = environment.apiUrl;
 const urlAuth = `${url}/auth`;
@@ -18,10 +19,12 @@ export class AuthService {
   public idUsuario!:string
   usuario!:UsuarioModel;
   empresa!:Empresa;
+  empresaId!:string;
 
 
   constructor(
                 private http:HttpClient,
+                
                 
                 ) { }
   login(formData:{usuario?:string,password?:string}){
@@ -43,12 +46,12 @@ export class AuthService {
       map( (resp: any) => {
         console.log(resp);
         this.idUsuario = resp.uid
+    
+        const {nombre, username, rol, email, _id, empresa} = resp.usuario;
+        this.usuario = new UsuarioModel(_id, username, nombre, rol,email, empresa);
+        this.empresaId = empresa!;
         
-        const empresa = resp.empresa
-        const {nombre, username, rol, email, _id} = resp.usuario;
-        console.log(nombre, username,rol, empresa );
-        this.usuario = new UsuarioModel(_id, username, nombre, rol,email);
-        this.empresa = empresa
+    
         console.log(this.usuario);
         
         this.guardarLocalStorage(resp.token, resp.menu)

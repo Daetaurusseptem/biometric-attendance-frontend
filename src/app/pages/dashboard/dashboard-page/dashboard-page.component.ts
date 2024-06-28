@@ -5,6 +5,7 @@ import { ReportService } from 'src/app/report.service';
 import { AsistenciasService } from 'src/app/services/asistencias.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { EmpresaService } from 'src/app/services/company.service';
+import { FechasService } from 'src/app/services/fechas.service';
 import { UsuariosService } from 'src/app/services/users.service';
 
 
@@ -19,14 +20,24 @@ export class DashboardPageComponent implements OnInit{
   numberOfCompanies:any;
   user!:UsuarioModel;
   role!:string;
+  mesActual = this.fechaService.getMesNombre(new Date().getMonth())   
+  Currentyear=new Date().getFullYear();
+  companyId=''
+  
   constructor(
     private  companyService:EmpresaService,
     private  userServices:UsuariosService,
-    private  authService:AuthService,
+    public  authService:AuthService,
     private  reportesService:ReportService,
+    private  fechaService:FechasService,
 
     ){
+      if(this.authService.role == 'sysadmin'){
+        this.companyId = this.authService.getCompany._id!;
+      }else if(this.authService.role == 'admin'){
     
+        this.companyId = this.authService.empresaId!;
+      }
       
   }
 
@@ -41,37 +52,16 @@ export class DashboardPageComponent implements OnInit{
 ngOnInit(): void {
   this.user = this.authService.usuario;
   this.role =this.user.rol;
-
-  this.getNumberUsers();
-  this.getNumberCompanies();
-  this.reportesService.getResumenAsistencias(this.authService.empresa._id!).subscribe(data => {
+  this.reportesService.getResumenAsistencias(this.companyId).subscribe(data => {
     this.chartData = data;
     // Luego puedes pasar estos datos a tu componente de gráfico
   });
 
 }
-getNumberUsers(){
-  this.userServices.getNumberUsers()
-  .pipe(
-    map(item=>item.numberOfUsers)
 
-  )
-  .subscribe(numberOfUsers=>{
-    console.log(numberOfUsers);
-    this.numberOfUsers= numberOfUsers
-  })
-}
-getNumberCompanies(){
-  this.companyService.getNumberOfCompanies()
-  .pipe(
-    map(item=>item.numberOfCompanies)
 
-  )
-  .subscribe(numberOfCompanies=>{
-    console.log(numberOfCompanies);
-    this.numberOfCompanies= numberOfCompanies
-  })
-}
+
+
 verReportes() {
 throw new Error('Method not implemented.');
 }

@@ -55,7 +55,7 @@ export class EmpleadosAttendancesComponent {
 
 
   employees: Empleado[] = [];
-  empresaId = this.authService.empresa._id; // Sustituye por el ID real de la empresa
+  empresaId = this.authService.empresaId; // Sustituye por el ID real de la empresa
   month = 'MES'; // Formato: 'MM'
   year = 'AÑO'; // Formato: 'YYYY'
   // departamentoId = 'DEPARTAMENTO_ID'; // Opcional

@@ -52,7 +52,7 @@ export class EditEmpleadoComponent {
     private fb: FormBuilder,
     private router: Router
   ) {
-    this.empresaId = authService.empresa._id!
+    this.empresaId = authService.empresaId
     this.activatedRoute.params.subscribe(params => {
       this.id = params['id'];
       this.getEmployee(this.id);

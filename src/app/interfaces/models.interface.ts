@@ -38,6 +38,7 @@ export interface Asistencia {
   // empresa.interface.ts
   export interface Empresa {
     _id?: string; // Optional since it's provided by the database upon creation
+    id?: string; // Optional since it's provided by the database upon creation
     nombre: string;
     direccion: string;
     email: string;

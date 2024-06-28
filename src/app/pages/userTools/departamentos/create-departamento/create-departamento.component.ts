@@ -23,7 +23,7 @@ export class CreateDepartamentoComponent {
   departamento: Departamento = {
     nombre: '',
     descripcion: '',
-    empresa: this.authService.empresa._id!
+    empresa: this.authService.empresa!
 
   };
 

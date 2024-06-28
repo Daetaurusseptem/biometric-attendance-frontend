@@ -29,7 +29,7 @@ export class DepartamentosListComponent {
               ) {}
 
   ngOnInit(): void {
-    this.departamentoService.getDepartamentosEmpresa(this.authService.empresa._id!)
+    this.departamentoService.getDepartamentosEmpresa(this.authService.empresaId!)
     .pipe(
       map(item=>{
         console.log(item);
