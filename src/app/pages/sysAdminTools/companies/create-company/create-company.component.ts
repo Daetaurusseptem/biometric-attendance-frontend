@@ -39,7 +39,7 @@ ngOnInit(): void {
 
   
 
-  this.userService.availableAdminsEmpresa()
+  this.userService.getAvailableAdmins()
   .pipe(
     map(item=>item.usuarios)
   )

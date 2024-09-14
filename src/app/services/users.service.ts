@@ -63,12 +63,15 @@ export class UsuariosService {
     
     
   }
-    availableAdminsEmpresa(){
-    return this.http.get<itemResponse>(`${urlApiUsuarios}/company/admins`, this.authService.headers);
+    allAdminsEmpresa(){
+    return this.http.get<itemResponse>(`${urlApiUsuarios}/company/admins/all`, this.authService.headers);
   }
     availableAdminsDepartamento(empresa:string){
       ///usuarios-disponibles/:empresaId
     return this.http.get<itemResponse>(`${urlApiUsuarios}/usuarios-disponibles/${empresa}`, this.authService.headers);
+  }
+  getAvailableAdmins() {
+    return this.http.get<itemResponse>(`${urlApiUsuarios}/company/admins/available`);
   }
 
 

@@ -24,14 +24,31 @@ export class AsistenciasService {
     return this.http.get<itemResponse>(`${this.baseURL}/asistencias/mensuales/${empresaId}?page=${page}&limit=${limit}&month=${month}&year=${year}&limit=${limit}`);
   }
 
-  updateAsistencia(idAsistencia:string, formData:FormData|{entrada:Date, salida:Date, tipo: 'asistencia' |'inasistencia'|'inconsistencia'}) {
-   
-    return this.http.put<itemResponse>(`${this.baseURL}/asistencias/${idAsistencia}`, formData, this.authService.headers );
-  };
+  updateAsistencia(idAsistencia: string, formData: FormData | { entrada: Date, salida: Date, tipo: 'asistencia' | 'inasistencia' | 'inconsistencia' }): Observable<itemResponse> {
+    console.log('Actualizando asistencia:', formData);
 
-  createAsistencia(idEmpleado:string, asistencia:{entrada:Date,salida:Date, detalles:string }){
-    console.log(console.log(asistencia));
-    return this.http.post<itemResponse>(`${this.baseURL}/asistencias/${idEmpleado}`, asistencia, this.authService.headers);
-    };
+    let payload = formData;
+    if (!(formData instanceof FormData)) {
+      payload = {
+        entrada: formData.entrada,
+        salida: formData.salida,
+        tipo: formData.tipo
+      };
+    }
+
+    return this.http.put<itemResponse>(
+      `${this.baseURL}/asistencias/${idAsistencia}`,
+      payload,
+      this.authService.headers
+    );
+  }
+  createAsistencia(idEmpleado: string, asistencia: { entrada: Date, salida: Date, detalles: string }): Observable<itemResponse> {
+    console.log('Creando asistencia', asistencia, idEmpleado); // Consola mejorada
+    return this.http.post<itemResponse>(
+      `${this.baseURL}/asistencias/${idEmpleado}`,
+      asistencia,
+      this.authService.headers
+    );  
+  }
   
 }

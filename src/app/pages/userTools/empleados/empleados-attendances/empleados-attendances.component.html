@@ -1,77 +1,87 @@
 <div class="container mt-3">
+  <!-- Filtros de selección -->
   <div class="row mb-3">
     <div class="col">
       <div class="card">
-        <!-- Selector de Mes -->
-        <label for="mesSelector" class="form-label">Mes:</label>
-        <select class="form-select" id="mesSelector" [(ngModel)]="selectedMonth" (change)="actualizarAsistencias()">
-          <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
-        </select>
-        <div class="col">
+        <div class="card-body">
+          <!-- Selector de Mes -->
+          <div class="form-group">
+            <label for="mesSelector" class="form-label">Mes:</label>
+            <select class="form-select" id="mesSelector" [(ngModel)]="selectedMonth" (change)="actualizarAsistencias()">
+              <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+            </select>
+          </div>
+
           <!-- Selector de Año -->
-          <label for="anioSelector" class="form-label">Año:</label>
-          <select class="form-select" id="anioSelector" [(ngModel)]="selectedYear" (change)="actualizarAsistencias()">
-            <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-          </select>
+          <div class="form-group mt-3">
+            <label for="anioSelector" class="form-label">Año:</label>
+            <select class="form-select" id="anioSelector" [(ngModel)]="selectedYear" (change)="actualizarAsistencias()">
+              <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Tabla de asistencias -->
   <div class="row">
     <div class="col-12">
-      <!-- Tabla de Asistencias -->
-      <div *ngIf="!cargado"  class="card">
-        <app-spinner  ></app-spinner>
+      <!-- Spinner mientras se cargan los datos -->
+      <div *ngIf="!cargado" class="card">
+        <app-spinner></app-spinner>
       </div>
-      <div  class="card">
+
+      <!-- Tabla de asistencias cuando los datos están listos -->
+      <div *ngIf="cargado" class="card">
         <div class="card-body">
-       
+          <!-- Paginador -->
           <mat-paginator 
               [length]="totalEmpleados"
-               [pageSize]="10"
-               [pageSizeOptions]="[5, 10, 20, totalEmpleados]"
-               (page)="cambiarPagina($event)">
+              [pageSize]="limit"
+              [pageSizeOptions]="[5, 10, 20, totalEmpleados]"
+              (page)="cambiarPagina($event)">
           </mat-paginator>
-          <span>
-            <button class="btn btn-primary mb-4" (click)="reportService.downloadReport(empresaId!, selectedMonth, selectedYear)">
-              Descargar Reporte {{months[selectedMonth-1].name}} {{selectedYear}}
-              <i class="bi bi-download ms-2"></i>
-            </button>
-          </span>
+
+          <!-- Botón de descarga -->
+          <button class="btn btn-primary mb-4" (click)="reportService.downloadReport(empresaId!, selectedMonth, selectedYear)">
+            Descargar Reporte {{ months[selectedMonth - 1].name }} {{ selectedYear }}
+            <i class="bi bi-download ms-2"></i>
+          </button>
+
+          <!-- Tabla con días y asistencias -->
           <div class="table-responsive">
             <table class="table table-striped table-bordered">
               <thead>
+                <!-- Encabezados de días del mes -->
                 <tr>
                   <th class="sticky-column-first">Id</th>
                   <th class="sticky-column-second">Nombre</th>
-                  <!-- Generar dinámicamente los encabezados de los días del mes -->
                   <ng-container *ngFor="let dia of diasDelMes(selectedMonth, selectedYear)">
                     <th class="table-light">{{ dia.dia }}</th>
                   </ng-container>
-                  
                 </tr>
+
+                <!-- Encabezados de días de la semana -->
                 <tr>
                   <th class="sticky-column-first"></th>
                   <th class="sticky-column-second"></th>
                   <ng-container *ngFor="let dia of diasDelMes(selectedMonth, selectedYear)">
                     <th class="table-light">{{ dia.diaSemana }}</th>
                   </ng-container>
-                  
                 </tr>
               </thead>
               <tbody>
-                <tr  *ngFor="let empleado of employees">
-                  <td class="sticky-column-first">{{ empleado.uidBiometrico}}</td>
-                  <td class="sticky-column-second">{{ empleado.nombre}}</td>
-                  <!-- Generar dinámicamente las celdas de asistencia para cada día -->
+                <!-- Filas con datos de empleados y asistencia por día -->
+                <tr *ngFor="let empleado of employees">
+                  <td class="sticky-column-first">{{ empleado.uidBiometrico }}</td>
+                  <td class="sticky-column-second">{{ empleado.nombre }}</td>
                   <ng-container *ngFor="let dia of diasDelMes(selectedMonth, selectedYear)">
-
-                    <td class="pointer"  (click)="abrirDialogoAsistencia(obtenerAsistenciaData(empleado._id!, dia.dia, selectedMonth, selectedYear))"  [ngClass]="{
-                      'table-success': obtenerAsistencia(empleado._id!, dia.dia, selectedMonth-1, selectedYear) === 'asistencia',
-                      'table-warning': obtenerAsistencia(empleado._id!, dia.dia, selectedMonth-1, selectedYear) === 'inconsistencia',
-                      'table-danger': obtenerAsistencia(empleado._id!, dia.dia, selectedMonth-1, selectedYear) === 'inasistencia'
-                    }">{{ obtenerAsistencia(empleado._id!, dia.dia, selectedMonth-1, selectedYear) }}</td>
+                    <td class="pointer" 
+                        (click)="abrirDialogoAsistencia(obtenerAsistenciaData(empleado._id!, dia.dia, selectedMonth, selectedYear))"
+                        [ngClass]="getAsistenciaClass(obtenerAsistencia(empleado._id!, dia.dia, selectedMonth, selectedYear))">
+                      {{ obtenerAsistencia(empleado._id!, dia.dia, selectedMonth, selectedYear) }}
+                    </td>
                   </ng-container>
                 </tr>
               </tbody>

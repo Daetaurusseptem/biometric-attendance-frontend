@@ -1,6 +1,6 @@
 import { NgIf } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, delay } from 'rxjs';
+import { Subscription, delay, map } from 'rxjs';
 import { Usuario } from 'src/app/interfaces/models.interface';
 import { AuthService } from 'src/app/services/auth.service';
 import { ModalService } from 'src/app/services/modal.service';
@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
 export class UserListComponent implements OnInit, OnDestroy {
   users: Usuario[] = [];
   public imgSubs!: Subscription;
-  companyId!:any;
+  companyId!: any;
 
   usuario = this.authService.usuario;
 
@@ -29,9 +29,9 @@ export class UserListComponent implements OnInit, OnDestroy {
     private modalService: ModalService
 
   ) {
-      if(this.usuario.rol = 'admin'){
-        this.companyId = this.usuario.empresa!
-      }
+    if (this.usuario.rol = 'admin') {
+      this.companyId = this.usuario.empresa!
+    }
 
 
   }
@@ -94,12 +94,18 @@ export class UserListComponent implements OnInit, OnDestroy {
   loadUsers() {
     const userRole = this.authService.usuario.rol;
     if (userRole == 'sysadmin') {
-      this.userService.getUsers().subscribe(users => {
-        this.users = users;
-      })
+      this.userService.getAllAdmins()
+
+        .pipe(map(item => {
+          console.log(item);
+          item.usuarios
+        }))
+        .subscribe(users => {
+          this.users = users!;
+        })
     }
-    else if(userRole=='admin'){
-      this.userService.getCompanyUsers(this.companyId).subscribe(users => {
+    else if (userRole == 'admin') {
+      this.userService.getUsers().subscribe(users => {
         this.users = users;
       })
     }

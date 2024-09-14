@@ -1,6 +1,5 @@
-import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AsistenciasService } from 'src/app/services/asistencias.service';
 import Swal from 'sweetalert2';
 
@@ -9,156 +8,141 @@ import Swal from 'sweetalert2';
   templateUrl: './asistencia-dialog.component.html',
   styleUrls: ['./asistencia-dialog.component.css']
 })
-export class AsistenciaDialogComponent {
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private asistenciasService: AsistenciasService,
-    private router: Router
-  ) {
-
-    this.fechaObj = this.data.fecha
-  }
-  fecha: Date | undefined;
-  tipo: "asistencia" | "inconsistencia" | "inasistencia" = 'inasistencia'
-  entradaHoras!: any
-  entradaMinutos!: any
-  salidaHoras!: any
-  salidaMinutos!: any
-  horasLaboradas!: any
-  fechaObj: any
-  horaEntrada: any;
-  horaSalida: any;
-  detalles!: string;
+export class AsistenciaDialogComponent implements OnInit {
+  fecha!: Date;
+  tipo: 'asistencia' | 'inconsistencia' | 'inasistencia' = 'inasistencia';
+  entradaHoras!: string;
+  salidaHoras!: string;
+  entradaMinutos!: string;
+  salidaMinutos!: string;
+  horasLaboradas!: string;
+  horaEntrada!: string;
+  horaSalida!: string;
+  detalles: string = '';
   empleadoId!: string;
+  asistenciaExiste: boolean = false;
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,  // La data llega en el formato crudo que mencionaste
+    private asistenciasService: AsistenciasService,
+    private dialogRef: MatDialogRef<AsistenciaDialogComponent>
+  ) {
+    // Asegúrate de que los datos tengan una estructura válida, incluso si no están completamente definidos
+    this.data = this.data || {};
+    this.data.asistencia = this.data.asistencia || {};
+    this.fecha = this.data.asistencia.fecha || new Date(); // Se asigna la fecha de la asistencia o una fecha por defecto
+    this.tipo = this.data.asistencia.tipo || 'inasistencia'; // Tipo de asistencia que viene en el payload
+    this.empleadoId = this.data.asistencia.empleadoId; // Empleado asociado a la asistencia
+    this.asistenciaExiste = !!this.data.asistencia.asistenciaId;  // Verifica si existe una asistencia previa
+  }
 
   ngOnInit(): void {
     this.cargarHoras();
   }
 
-  editarAsistencia(idAsistencia: string, asistenciaData: { entrada: any, salida: any, tipo: any, detalles?: string }) {
+  cargarHoras() {
+    // Verifica si los datos de asistencia tienen entrada y salida definidas
+    if (!this.data.asistencia || !this.data.asistencia.entrada || !this.data.asistencia.salida) {
+      this.horasLaboradas = `No asistió`;
+      this.horaEntrada = "00:00";
+      this.horaSalida = "00:00";
+    } else {
+      // Extraer las horas y minutos de entrada y salida
+      const entrada = new Date(this.data.asistencia.entrada);
+      const salida = new Date(this.data.asistencia.salida);
 
-    console.log(idAsistencia, asistenciaData, this.fecha);
+      this.entradaHoras = this.formatTwoDigits(entrada.getHours());
+      this.entradaMinutos = this.formatTwoDigits(entrada.getMinutes());
+      this.salidaHoras = this.formatTwoDigits(salida.getHours());
+      this.salidaMinutos = this.formatTwoDigits(salida.getMinutes());
 
+      this.horaEntrada = `${this.entradaHoras}:${this.entradaMinutos}`;
+      this.horaSalida = `${this.salidaHoras}:${this.salidaMinutos}`;
+      this.horasLaboradas = `${this.horaEntrada} - ${this.horaSalida}`;
+    }
 
-    const entradaFechaHora = asistenciaData.entrada.defaultTime;
-    const salidaFechaHora = asistenciaData.salida.defaultTime;
+    // Detalles (si existen)
+    this.detalles = this.data.asistencia.detalles || '';
+  }
 
-    const partesEntrada = entradaFechaHora.split(':')
-    const partesSalida = salidaFechaHora.split(':')
+  formatTwoDigits(num: number): string {
+    return num < 10 ? `0${num}` : `${num}`;
+  }
 
-    const entradaFecha = new Date(this.fecha!.getFullYear(), this.fecha!.getMonth(), this.fecha!.getDay(), partesEntrada[0], partesEntrada[1]);
-    const salidaFecha = new Date(this.fecha!.getFullYear(), this.fecha!.getMonth(), this.fecha!.getDay(), partesSalida[0], partesSalida[1]);
-    console.log(entradaFecha);
-    console.log(salidaFecha);
+  // Método para crear una nueva asistencia
+  crearAsistencia() {
+    const partesEntrada = this.horaEntrada.split(':');
+    const partesSalida = this.horaSalida.split(':');
+
+    const entradaFecha = new Date(this.fecha.getFullYear(), this.fecha.getMonth(), this.fecha.getDate(), +partesEntrada[0], +partesEntrada[1]);
+    const salidaFecha = new Date(this.fecha.getFullYear(), this.fecha.getMonth(), this.fecha.getDate(), +partesSalida[0], +partesSalida[1]);
 
     const asistenciaPayload = {
       entrada: entradaFecha,
       salida: salidaFecha,
-      tipo: asistenciaData.tipo,
-      detalles: this.detalles
-    }
+      tipo: this.tipo,
+      detalles: this.detalles || ''
+    };
 
-    console.log(asistenciaPayload);
-    
-
-    if (this.tipo === 'inasistencia') {
-      Swal.fire({
-        title: 'estas seguro?',
-        icon: 'question',
-        showCancelButton: true,
-        cancelButtonColor: '#F176B7'
-      })
-        .then(resp => {
-          if (resp.isConfirmed) {
-            console.log(this.empleadoId);
-            this.asistenciasService.createAsistencia(this.empleadoId, asistenciaPayload)
-              .subscribe(r => {
-
-                console.log(r);
-                return
-              })  
-          }
-        }
-      )
-        .catch(r => { return })
-
-    }else if (this.tipo === 'asistencia' || "inconsistencia") {
-
-      Swal.fire({
-        title: 'estas seguro?',
-        icon: 'question',
-        showCancelButton: true,
-        cancelButtonColor: '#F176B7'
-      })
-        .then(resp => {
-          if (resp.isConfirmed) {
-            this.asistenciasService.updateAsistencia(idAsistencia, asistenciaPayload)
-              .subscribe(r => {
-
-
-                console.log(r);
-
-              })
-          }
-        })
-        .catch(r => { return })
-
-
-
-    }
-
-
-
+    Swal.fire({
+      title: '¿Estás seguro de crear esta asistencia?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, crear',
+      cancelButtonText: 'Cancelar',
+      cancelButtonColor: '#F176B7'
+    }).then(resp => {
+      if (resp.isConfirmed) {
+        this.asistenciasService.createAsistencia(this.empleadoId, asistenciaPayload).subscribe(() => {
+          this.dialogRef.close({ actualizado: true }); // Notifica que se creó
+        });
+      }
+    }).catch(() => {
+      this.dialogRef.close({ actualizado: false }); // En caso de cancelación, cierra sin cambios
+    });
   }
 
+  // Método para editar una asistencia existente
+  editarAsistencia(idAsistencia: string) {
+    const partesEntrada = this.horaEntrada.split(':');
+    const partesSalida = this.horaSalida.split(':');
 
+    const entradaFecha = new Date(this.fecha.getFullYear(), this.fecha.getMonth(), this.fecha.getDate(), +partesEntrada[0], +partesEntrada[1]);
+    const salidaFecha = new Date(this.fecha.getFullYear(), this.fecha.getMonth(), this.fecha.getDate(), +partesSalida[0], +partesSalida[1]);
 
-  cargarHoras() {
-    console.log('DATTAAAA CRUDA: ', this.data);
-    console.log('type: ', this.data.fecha.tipo);
+    const asistenciaPayload = {
+      entrada: entradaFecha,
+      salida: salidaFecha,
+      tipo: this.tipo,
+      detalles: this.detalles || ''
+    };
 
+    Swal.fire({
+      title: '¿Estás seguro de editar esta asistencia?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, editar',
+      cancelButtonText: 'Cancelar',
+      cancelButtonColor: '#F176B7'
+    }).then(resp => {
+      if (resp.isConfirmed) {
+        this.asistenciasService.updateAsistencia(idAsistencia, asistenciaPayload).subscribe(() => {
+          this.dialogRef.close({ actualizado: true }); // Notifica que se editó
+        });
+      }
+    }).catch(() => {
+      this.dialogRef.close({ actualizado: false }); // En caso de cancelación, cierra sin cambios
+    });
+  }
 
-
-    if (this.data.fecha.entrada == null || this.data.fecha.entrada == null) {
-      this.horasLaboradas = `No asistio`
-      this.horaEntrada = "00:00"
-      this.horaSalida = "00:00"
+  // Este método se ejecuta al hacer clic en "Guardar" y decide si crear o editar
+  guardarAsistencia() {
+    if (this.asistenciaExiste) {
+      // Editar asistencia existente
+      this.editarAsistencia(this.data.asistencia.asistenciaId);
     } else {
-      this.entradaHoras = new Date(this.fechaObj.entrada).getHours()
-      this.salidaHoras = new Date(this.fechaObj.salida).getHours()
-
-
-      this.entradaMinutos = new Date(this.fechaObj.salida).getMinutes()
-      this.salidaMinutos = new Date(this.fechaObj.entrada).getMinutes()
-
-      if (this.entradaMinutos < 10) {
-        this.entradaMinutos = "0" + this.entradaMinutos
-      }
-
-      if (this.salidaMinutos < 10) {
-        this.salidaMinutos = "0" + this.salidaMinutos
-      }
-
-      this.horaEntrada = `${this.entradaHoras}:${this.entradaMinutos}`
-      this.horaSalida = `${this.salidaHoras}:${this.salidaMinutos}`
-
-      this.horasLaboradas = `${this.entradaHoras}:${this.entradaMinutos} - ${this.salidaHoras}:${this.salidaMinutos}`
-
-
-
-      if (this.horasLaboradas == '00:00') {
-        this.horasLaboradas = 'No asistio'
-      }
-
+      // Crear nueva asistencia
+      this.crearAsistencia();
     }
-
-
-
-    this.fecha = this.fechaObj.fecha
-    this.tipo = this.fechaObj.tipo
-    this.detalles = this.fechaObj.detalles || ""
-    this.empleadoId = this.fechaObj.empleadoId
-
   }
-
 }

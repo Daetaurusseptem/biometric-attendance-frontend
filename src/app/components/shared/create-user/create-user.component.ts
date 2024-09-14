@@ -16,96 +16,84 @@ import Swal from 'sweetalert2';
 })
 export class CreateUserReComponent {
 
-  UsuarioRole!:'admin'|'sysadmin'|'user';
-  companies!:Empresa[];
-  EmpresaId!:string;
-  
+  UsuarioRole!: 'admin' | 'sysadmin' | 'user';
+  companies!: Empresa[];
+  EmpresaId!: string;
 
   user: Usuario = {
     nombre: '',
-    email:'',
+    email: '',
     username: '',
     password: '',
-    empresa:'',
+    empresa: '',
     rol: 'admin'
   };
 
   constructor(
-              private UsuarioService: UsuariosService,
-              private companiesService: EmpresaService,
-              private authService: AuthService,
-              private router: Router,
-
-              
-              ) {
-                this.getRole();
-              }
-
-getRole(){
-  this.UsuarioRole = this.authService.role;
-  if(this.UsuarioRole=='user'){
-    return 'user'
-  }else if(this.UsuarioRole=='admin'){
-    console.log('admin');
-    this.companies = [];  
-    this.EmpresaId=this.authService.getCompany._id!
-    this.user.empresa=this.EmpresaId
-    console.log(this.EmpresaId,this.user);
-    this.user.rol =='admin'
-    
-  }else if(this.UsuarioRole=='sysadmin'){
-    console.log('sys');
-    this.getCompanies()
-    this.user.rol =='sysadmin'
-    
+    private UsuarioService: UsuariosService,
+    private companiesService: EmpresaService,
+    private authService: AuthService,
+    private router: Router,
+  ) {
+    this.getRole();
   }
-  return
-}              
-  getCompanies(){
-    this.companiesService.getCompanies()
-    .pipe(
-      map(item=>item.empresas)
-    )
-    .subscribe(companies=>{this.companies=companies!})
 
+  getRole(): void {
+    this.UsuarioRole = this.authService.role;
+  
+    if (this.UsuarioRole === 'user') {
+      return;
+    } else if (this.UsuarioRole === 'admin') {
+      console.log('admin');
+      this.companies = [];
+      this.EmpresaId = this.authService.getCompany._id!;
+      this.user.empresa = this.EmpresaId; // La empresa del usuario logueado
+      this.user.rol = 'user'; // El admin crea usuarios con rol 'user'
+    } else if (this.UsuarioRole === 'sysadmin') {
+      console.log('sysadmin');
+      this.getCompanies();
+      this.user.empresa = ''; // Inicializamos sin empresa para evitar conflictos
+      this.user.rol = 'admin'; // El sysadmin crea usuarios con rol 'admin'
+    }
+  }
+
+  getCompanies() {
+    this.companiesService.getCompanies()
+      .pipe(map(item => item.empresas))
+      .subscribe(companies => { this.companies = companies! });
   }
 
   createUser(form: NgForm) {
-    if(this.UsuarioRole=='user'){
-      return 
-    }
-    if(this.UsuarioRole == 'admin'){
-      this.user.empresa = this.authService.empresa._id
-      
-    }
-    if(this.UsuarioRole == 'sysadmin'){
-      this.user.empresa = ''
-      
+    if (this.UsuarioRole === 'user') {
+      return;
     }
   
-    
+    // Si el rol es sysadmin, eliminamos la empresa del objeto user
+    if (this.UsuarioRole === 'sysadmin') {
+      delete this.user.empresa;
+    }
+  
     if (form.valid) {
       console.log(form.value);
       this.UsuarioService.createUser(this.user).subscribe({
-        next: (createdEmpresa) => {
+        next: (createdUsuario) => {
           Swal.fire({
-            text:'Usuario creado correctamente',
-            icon:'success'
+            text: 'Usuario creado correctamente',
+            icon: 'success'
           })
-          .then(()=>{
-            if(this.UsuarioRole=='admin'){
-              this.router.navigateByUrl('/dashboard/admin/users')
-            }else if(this.UsuarioRole=='sysadmin'){
-              this.router.navigateByUrl('/dashboard/sysadmin/users')
-            }
-          })
+            .then(() => {
+              if (this.UsuarioRole === 'admin') {
+                this.router.navigateByUrl('/dashboard/admin/users');
+              } else if (this.UsuarioRole === 'sysadmin') {
+                this.router.navigateByUrl('/dashboard/sysadmin/users');
+              }
+            });
         },
         error: (error) => {
           Swal.fire({
-            text:'Usuario no pudo ser creado',
-            icon:'error'
-          })
-          
+            text: error.error.message,
+            icon: 'error'
+          });
         }
       });
     }
